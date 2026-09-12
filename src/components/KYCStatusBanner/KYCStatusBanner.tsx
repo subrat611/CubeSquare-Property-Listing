@@ -20,8 +20,8 @@ export const KYCStatusBanner = ({ status }: KYCStatusBannerProps) => {
   const iconClass = isPending ? "bi-clock-history" : "bi-exclamation-circle";
 
   const message = isPending
-    ? "Your identity verification is in progress. You can browse properties but cannot invest yet."
-    : "Your identity verification was unsuccessful. Please contact support to resolve this issue.";
+    ? "Your identity verification is in progress. You can browse but cannot invest yet."
+    : "Your identity verification was unsuccessful. Please contact support.";
 
   return (
     <div className="container mt-3 mb-2">
