@@ -7,9 +7,14 @@ const SIMULATED_LATENCY = 800;
 
 // Fetcher Function
 export const getProperties = async (): Promise<Property[]> => {
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     setTimeout(() => {
-      resolve(mockProperties);
+      // Simulate a 25% chance of API failure to demonstrate the Error State & Retry mechanism
+      if (Math.random() < 0.25) {
+        reject(new Error("Simulated Network Error"));
+      } else {
+        resolve(mockProperties);
+      }
     }, SIMULATED_LATENCY);
   });
 };
@@ -24,5 +29,7 @@ export const useGetProperties = () => {
   return useQuery({
     queryKey: propertiesQueryKeys.all,
     queryFn: getProperties,
+    retry: false, // Disable automatic retries so our custom error UI shows immediately
+    refetchOnWindowFocus: false,
   });
 };
