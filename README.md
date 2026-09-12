@@ -1,6 +1,6 @@
 # CubeSquare Property Listing Experience
 
-I have deployed this site on vercel: Do visit `<link>` (if running out of time)
+I have deployed this site on netlify: Do visit [https://cubesquare.netlify.app/](https://cubesquare.netlify.app/)
 
 ## Tech Stack
 
