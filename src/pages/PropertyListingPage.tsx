@@ -6,6 +6,7 @@ import {
 import { KYCStatusBanner } from "../components/KYCStatusBanner/KYCStatusBanner";
 import { PropertyFilterPanel } from "../features/properties/components/PropertyFilterPanel";
 import { PropertyGrid } from "../features/properties/components/PropertyGrid";
+import { Header } from "../components/Header/Header";
 
 export const PropertyListingPage = () => {
   const [filters, setFilters] = useState<PropertiesFilter>({
@@ -13,7 +14,12 @@ export const PropertyListingPage = () => {
     location: "",
   });
 
-  const { data: properties = [], isLoading, isError } = useGetProperties();
+  const {
+    data: properties = [],
+    isLoading,
+    isError,
+    refetch,
+  } = useGetProperties();
 
   const filteredProperties = useMemo(() => {
     return properties.filter((property) => {
@@ -21,36 +27,46 @@ export const PropertyListingPage = () => {
         ? property.location === filters.location
         : true;
 
-      const matchesYield = filters.minYield
-        ? property.yieldPercent >= Number(filters.minYield)
-        : true;
+      const matchesYield =
+        filters.minYield !== ""
+          ? property.yieldPercent >= filters.minYield
+          : true;
 
       return matchesLocation && matchesYield;
     });
   }, [properties, filters]);
 
+  const handleResetFilters = () => {
+    setFilters({ minYield: "", location: "" });
+  };
+
   return (
     <div className="page-wrapper">
+      <Header />
       <KYCStatusBanner status="pending" />
 
       <div className="container py-4">
-        <header className="mb-4">
-          <h1 className="h2 mb-1">Property Offerings</h1>
-          <p className="text-muted">
-            Browse and invest in premium real estate.
-          </p>
-        </header>
-
-        {/* Filter Section */}
-        <div className="mb-4">
-          <PropertyFilterPanel filters={filters} onFilterChange={setFilters} />
+        <div className="d-flex flex-column flex-lg-row justify-content-between align-items-lg-end mb-4 gap-3">
+          <div>
+            <h2 className="h3 mb-1">Property Offerings</h2>
+            <p className="text-muted mb-0">
+              Browse and invest in premium real estate.
+            </p>
+          </div>
+          <div>
+            <PropertyFilterPanel
+              filters={filters}
+              onFilterChange={setFilters}
+            />
+          </div>
         </div>
 
-        {/* Grid Section */}
         <PropertyGrid
           properties={filteredProperties}
           isLoading={isLoading}
           isError={isError}
+          onResetFilters={handleResetFilters}
+          onRetry={refetch}
         />
       </div>
     </div>
