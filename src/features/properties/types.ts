@@ -7,3 +7,8 @@ export interface Property {
   availableTokens: number;
   yieldPercent: number;
 }
+
+export interface PropertiesFilter {
+  minYield: number | "";
+  location: string;
+}
